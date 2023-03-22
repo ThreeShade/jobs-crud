@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "poppins-reg";
+  font-style: normal;
+  src: url("./assets/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "poppins-med";
+  font-style: normal;
+  src: url("./assets/fonts/Poppins-Medium.ttf");
+}
+
+html,
+#root,
+body {
+  padding: 0;
+  height: 100%;
+  margin: 0;
+  font-family: "poppins-reg";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide Arrows From Input Number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide Arrows From Input Number */
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
