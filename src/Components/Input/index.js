@@ -18,7 +18,7 @@ function Input({
   return (
     <div className={` ${className ? className : ""} `}>
       <label
-        for={id ? id : name}
+        htmlFor={id ? id : name}
         className={` ${
           labelClassName ? labelClassName : ""
         } block mb-1 text-sm font-["poppins-med"] font-medium text-dark `}

@@ -25,7 +25,9 @@ function AllJobs({ createJobOnClick }) {
         } `}
       >
         {jobs?.map((job) => (
-          <JobCard data={job} />
+          <React.Fragment key={job.id}>
+            <JobCard data={job} />
+          </React.Fragment>
         ))}
       </section>
     </section>

@@ -7,21 +7,21 @@ import RadioButton from "../RadioButton";
 function CreateJob({ show, onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [createJobFormData, setCreateJobFormData] = useState({
-    jobTitle: null,
-    companyName: null,
-    industry: null,
-    location: null,
-    remoteType: null,
+    jobTitle: "",
+    companyName: "",
+    industry: "",
+    location: "",
+    remoteType: "",
     salary: {
-      min: null,
-      max: null
+      min: "",
+      max: ""
     },
     experience: {
-      min: null,
-      max: null
+      min: "",
+      max: ""
     },
-    applyType: null,
-    totalEmployee: null
+    applyType: "",
+    totalEmployee: ""
   });
   function step1Handler(event) {
     setCurrentStep(2);

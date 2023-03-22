@@ -9,10 +9,10 @@ function RadioButton({
   onChange,
   label,
   labelClassName,
-  inputClassName,
+  inputClassName
 }) {
   return (
-    <div className={` flex items-center ${className ? className : ""}`}  >
+    <div className={` flex items-center ${className ? className : ""}`}>
       <input
         checked={checked}
         id={id ? id : name}
@@ -20,11 +20,15 @@ function RadioButton({
         value={value}
         onChange={onChange}
         name={name}
-        className={` ${inputClassName?inputClassName:""} w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  `}
+        className={` ${
+          inputClassName ? inputClassName : ""
+        } w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  `}
       />
       <label
-        for={id ? id : name}
-        className={` ${labelClassName?labelClassName:""} text-placeholder text-sm font-["poppins-reg"] pl-1 `}
+        htmlFor={id ? id : name}
+        className={` ${
+          labelClassName ? labelClassName : ""
+        } text-placeholder text-sm font-["poppins-reg"] pl-1 `}
       >
         {label}
       </label>
