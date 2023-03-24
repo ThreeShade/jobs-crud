@@ -10,7 +10,7 @@ function Button(props) {
     <button
       type={type}
       onClick={onClick}
-      className={` rounded-md font-["poppins-reg"] text-base font-medium capitalize px-4 py-2 ${
+      className={` rounded-md font-["poppins-reg"] whitespace-nowrap text-sm md:text:base font-medium capitalize px-4 py-2 ${
         className ? className : ""
       } ${
         variant === "bordered" ? borderedButtonClassName : solidButtonClassName

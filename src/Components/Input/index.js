@@ -13,7 +13,8 @@ function Input({
   className,
   pattern,
   value,
-  title
+  title,
+  error
 }) {
   return (
     <div className={` ${className ? className : ""} `}>
@@ -40,6 +41,7 @@ function Input({
         placeholder={placeholder}
         required={required}
       />
+      <p className=" text-error text-xs pl-1 pt-1 ">{error?.length > 0 ? error : ` `}</p>
     </div>
   );
 }

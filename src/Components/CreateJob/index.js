@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { createNewJob } from "../../services/api";
+import { validator } from "../../utils/functions";
 import Button from "../Button";
 import Input from "../Input";
 import Modal from "../Modal";
 import RadioButton from "../RadioButton";
-function CreateJob({ show, onClose }) {
+const stepper1Fields = [
+  "jobTitle",
+  "companyName",
+  "industry",
+  "location",
+  "remoteType"
+];
+const stepper2Fields = ["salary", "experience", "applyType", "totalEmployee"];
+function CreateJob({ show = true, onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [error, setError] = useState({ step1: {}, step2: {} });
   const [createJobFormData, setCreateJobFormData] = useState({
     jobTitle: "",
     companyName: "",
@@ -24,12 +34,51 @@ function CreateJob({ show, onClose }) {
     totalEmployee: ""
   });
   function step1Handler(event) {
-    setCurrentStep(2);
+    event.preventDefault();
+    let _error = {};
+    stepper1Fields.forEach((field) => {
+      _error = { ..._error, ...validator(field, createJobFormData[field]) };
+    });
+    setError({ ...error, step1: { ...error.step1, ..._error } });
+    if (Object.values(_error).every((_err) => _err === null)) {
+      setCurrentStep(2);
+    }
+    _error = {};
   }
   function step2Handler(event) {
     event.preventDefault();
-    createNewJob(createJobFormData);
-    onClose();
+    let _error = {};
+    stepper2Fields.forEach((field) => {
+      switch (field) {
+        case "salary":
+        case "experience":
+          _error = {
+            ..._error,
+            ...validator(
+              field,
+              createJobFormData[field]?.min,
+              createJobFormData[field]?.max
+            )
+          };
+          break;
+
+        default:
+          _error = { ..._error, ...validator(field, createJobFormData[field]) };
+          break;
+      }
+    });
+    setError({ ...error, step2: { ...error.step2, ..._error } });
+    if (
+      _error?.salary?.min === null &&
+      _error?.salary?.max === null &&
+      _error?.experience?.max === null &&
+      _error?.experience?.min === null &&
+      _error?.totalEmployee === null &&
+      _error?.applyType === null
+    ) {
+      createNewJob(createJobFormData);
+      onClose();
+    }
   }
   function step1OnChangeHandler(event) {
     setCreateJobFormData({
@@ -60,6 +109,7 @@ function CreateJob({ show, onClose }) {
               name={"jobTitle"}
               type="text"
               label="Job title"
+              error={error?.step1?.jobTitle}
               placeholder={"ex. UX UI Designer"}
               required
             />
@@ -67,6 +117,7 @@ function CreateJob({ show, onClose }) {
               value={createJobFormData.companyName}
               className={` pb-6 `}
               name={"companyName"}
+              error={error?.step1?.companyName}
               type="text"
               label="Company name"
               placeholder={"ex. Google"}
@@ -75,6 +126,7 @@ function CreateJob({ show, onClose }) {
             <Input
               value={createJobFormData.industry}
               className={` pb-6 `}
+              error={error?.step1?.industry}
               name={"industry"}
               type="text"
               label="Industry"
@@ -87,6 +139,7 @@ function CreateJob({ show, onClose }) {
                 className={` w-1/2 `}
                 name={"location"}
                 type="text"
+                error={error?.step1?.location}
                 label="Location"
                 placeholder={"ex. Chennai"}
               />
@@ -95,6 +148,7 @@ function CreateJob({ show, onClose }) {
                 className={` w-1/2 `}
                 name={"remoteType"}
                 type="text"
+                error={error?.step1?.remoteType}
                 label="Remote type"
                 placeholder={"ex. In-office"}
               />
@@ -121,6 +175,7 @@ function CreateJob({ show, onClose }) {
                 name={"exp-min"}
                 type="number"
                 label="Experience"
+                error={error?.step2?.experience?.min}
                 placeholder={"Minimum"}
               />
               <Input
@@ -139,6 +194,7 @@ function CreateJob({ show, onClose }) {
                 type="number"
                 labelClassName={` opacity-0 `}
                 label={` Experience`}
+                error={error?.step2?.experience?.max}
                 placeholder={"Maximum"}
               />
             </div>
@@ -158,6 +214,7 @@ function CreateJob({ show, onClose }) {
                 name={"sal-min"}
                 type="number"
                 label="Salary"
+                error={error?.step2?.salary?.min}
                 placeholder={"Minimum"}
               />
               <Input
@@ -176,6 +233,7 @@ function CreateJob({ show, onClose }) {
                 type="number"
                 labelClassName={` opacity-0 `}
                 label={` Salary`}
+                error={error?.step2?.salary?.max}
                 placeholder={"Maximum"}
               />
             </div>
@@ -192,6 +250,7 @@ function CreateJob({ show, onClose }) {
               type="number"
               label="Total employee"
               placeholder={"ex. 100"}
+              error={error?.step2?.totalEmployee}
             />
             <label className=' block pb-3 text-sm font-["poppins-med"] font-medium text-dark '>
               Apply type
@@ -220,6 +279,9 @@ function CreateJob({ show, onClose }) {
                 name={"externalApply"}
               />
             </div>
+            <p className=" text-xs text-error pl-1 pt-1 ">
+              {error?.step2?.applyType?.length > 0 && error?.step2?.applyType}
+            </p>
             <div className=" w-full flex justify-end items-end grow h-full ">
               <Button
                 text={"Save"}
